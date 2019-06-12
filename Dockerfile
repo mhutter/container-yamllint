@@ -3,7 +3,8 @@ LABEL maintainer="Manuel Hutter (https://github.com/mhutter)"
 
 WORKDIR /yaml
 
-RUN pip install yamllint && \
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install -r /tmp/requirements.txt && \
     rm -rf ~/.cache/pip
 
 CMD ["yamllint", "--version"]
