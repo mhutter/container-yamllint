@@ -6,7 +6,7 @@ Container image containing the latest [yamllint](https://yamllint.readthedocs.io
 ## Usage
 
 ```
-docker run --rm -v "$(pwd):/yaml" mhutter/yamllint yamllint youryamlfiles.yaml
+docker run --rm -v "$(pwd):/yaml" quay.io/mhutter/yamllint yamllint .
 ```
 
 ### In gitlab ci runner
@@ -19,7 +19,7 @@ stages:
 
 yaml_syntax:
   stage: lint
-  image: docker.io/mhutter/yamllint
+  image: quay.io/mhutter/yamllint
   script:
     # remove single-line ERB code upfront to make templates lintable
     - find . -type f -name '*.y*ml.erb' -exec sed -i '/^<%.*%>$/d' {} \;
