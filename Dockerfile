@@ -1,4 +1,4 @@
-FROM docker.io/library/python:3-alpine
+FROM registry.mhnet.dev/library/python:3-alpine
 LABEL maintainer="Manuel Hutter (https://github.com/mhutter)" \
       org.opencontainers.image.source="https://github.com/mhutter/container-yamllint"
 
