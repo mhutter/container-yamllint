@@ -26,6 +26,13 @@ yaml_syntax:
 #...
 ```
 
+## Release
+
+After merging a yamllint update, create a new tag and push it:
+
+    ./tag-release.sh
+    git push --tags
+
 ## License
 
 MIT (see `LICENSE`)
