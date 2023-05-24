@@ -23,22 +23,25 @@ jobs:
         id: desired
         run: |
           tag="$(grep -oP '(?<=yamllint==).*' requirements.txt)"
-          echo "yamllint version: $tag" >> "$GITHUB_STEP_SUMMARY"
+          echo "yamllint version: $tag"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
 
       - name: Check if tag exists
         id: existing
         env:
-          TAG: ${{ steps.desired.tag }}
+          TAG: ${{ steps.desired.outputs.tag }}
         run: |
-          existing="$(git tag -l "$TAG" | grep "$TAG")"
-          echo "existing tag: '$existing'" >> "$GITHUB_STEP_SUMMARY"
-          echo "tag=$existing" >> "$GITHUB_OUTPUT"
+          echo "looking up tag '$TAG'"
+          git tag -l "$TAG" | grep -q "$TAG" || {
+            echo "tag is missing"
+            echo "missing=true" >> "$GITHUB_OUTPUT"
+          }
 
       - name: Create tag
-        if: steps.tag.outputs.tag != steps.existing.outputs.tag && github.ref_name == 'main'
+        if: steps.existing.outputs.missing == 'true' && github.ref_name == 'main'
         env:
-          TAG: ${{ steps.desired.tag }}
+          TAG: ${{ steps.desired.outputs.tag }}
         run: |
+          echo "creating tag '$TAG'"
           git tag -a "$TAG" -m "yamllint $TAG"
           git push origin "$TAG"
