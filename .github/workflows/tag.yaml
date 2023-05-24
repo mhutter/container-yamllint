@@ -1,0 +1,43 @@
+---
+name: Tag version
+
+# What it does: Create a new git tag based on the yamllint version used
+# Why it exists: Automated releases
+
+on:
+  push:
+    paths:
+      - requirements.txt
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Determine latest tag
+        id: desired
+        run: |
+          tag="$(grep -oP '(?<=yamllint==).*' requirements.txt)"
+          echo "yamllint version: $tag" >> "$GITHUB_STEP_SUMMARY"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Check if tag exists
+        id: existing
+        env:
+          TAG: ${{ steps.desired.tag }}
+        run: |
+          existing="$(git tag -l "$TAG" | grep "$TAG")"
+          echo "existing tag: '$existing'" >> "$GITHUB_STEP_SUMMARY"
+          echo "tag=$existing" >> "$GITHUB_OUTPUT"
+
+      - name: Create tag
+        if: ${{ (steps.tag.outputs.tag != steps.existing.outputs.tag) && github.ref_name == "main" }}
+        env:
+          TAG: ${{ steps.desired.tag }}
+        run: |
+          git tag -a "$TAG" -m "yamllint $TAG"
+          git push origin "$TAG"
