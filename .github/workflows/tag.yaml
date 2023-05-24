@@ -43,5 +43,7 @@ jobs:
           TAG: ${{ steps.desired.outputs.tag }}
         run: |
           echo "creating tag '$TAG'"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git config --global user.name "${{ github.actor }}"
           git tag -a "$TAG" -m "yamllint $TAG"
           git push origin "$TAG"
