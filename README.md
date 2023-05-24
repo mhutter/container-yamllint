@@ -1,16 +1,14 @@
-# YAMLlint image
-
-[![Docker Repository on Quay](https://quay.io/repository/mhutter/yamllint/status "Docker Repository on Quay")](https://quay.io/repository/mhutter/yamllint)
+# yamllint Container Image
 
 Container image containing the latest [yamllint](https://yamllint.readthedocs.io/en/latest/) release
 
 ## Usage
 
 ```sh
-docker run --rm -v "$(pwd):/yaml" quay.io/mhutter/yamllint yamllint .
+docker run --rm -v "$(pwd):/yaml" ghcr.io/mhutter/yamllint yamllint .
 ```
 
-### In gitlab ci runner
+### In GitLab CI runner
 
 ```yaml
 stages:
@@ -19,7 +17,7 @@ stages:
 
 yaml_syntax:
   stage: lint
-  image: quay.io/mhutter/yamllint
+  image: ghcr.io/mhutter/yamllint
   script:
     # remove single-line ERB code upfront to make templates lintable
     - find . -type f -name '*.y*ml.erb' -exec sed -i '/^<%.*%>$/d' {} \;
@@ -34,6 +32,5 @@ MIT (see `LICENSE`)
 
 ---
 
-> [Manuel Hutter](https://hutter.io/) -
+> [Manuel Hutter](https://mhu.dev/) -
 > GitHub [@mhutter](https://github.com/mhutter) -
-> Twitter [@dratir](https://twitter.com/dratir)
