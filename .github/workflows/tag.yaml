@@ -32,6 +32,7 @@ jobs:
           TAG: ${{ steps.desired.outputs.tag }}
         run: |
           echo "looking up tag '$TAG'"
+          git fetch --tags
           git tag -l "$TAG" | grep -q "$TAG" || {
             echo "tag is missing"
             echo "missing=true" >> "$GITHUB_OUTPUT"
