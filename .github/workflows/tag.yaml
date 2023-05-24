@@ -35,7 +35,7 @@ jobs:
           echo "tag=$existing" >> "$GITHUB_OUTPUT"
 
       - name: Create tag
-        if: ${{ (steps.tag.outputs.tag != steps.existing.outputs.tag) && github.ref_name == "main" }}
+        if: steps.tag.outputs.tag != steps.existing.outputs.tag && github.ref_name == 'main'
         env:
           TAG: ${{ steps.desired.tag }}
         run: |
